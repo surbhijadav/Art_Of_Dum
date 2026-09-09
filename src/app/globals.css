@@ -1,26 +1,70 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #faf7f2;
+  --foreground: #181715;
+  --font-serif-family: var(--font-cormorant), "Times New Roman", Times, serif;
+  --font-sans-family: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-serif-family);
+  --font-sans: var(--font-sans-family);
+  
+  --color-sand-50: #faf7f2;
+  --color-sand-100: #f4efe6;
+  --color-sand-200: #eae4d7;
+  --color-sand-300: #ded5c3;
+  --color-sand-400: #c9bc9e;
+  
+  --color-gold-400: #d4b279;
+  --color-gold-500: #c59d5f;
+  --color-gold-600: #ab8243;
+  --color-gold-700: #8c6833;
+  
+  --color-dark-900: #121110;
+  --color-dark-800: #1a1917;
+  --color-dark-700: #262421;
+  --color-dark-600: #383531;
+
+  --color-muted-foreground: #736d64;
+  --color-border-subtle: #e5ded2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Base resets & typography defaults */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Image and media defaults */
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif-family);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+p {
+  line-height: 1.75;
+  text-wrap: pretty;
 }
