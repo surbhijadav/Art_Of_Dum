@@ -68,3 +68,192 @@ p {
   line-height: 1.75;
   text-wrap: pretty;
 }
+
+/* Menu page: restrained fade/translate when switching menu categories */
+@keyframes menu-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-panel-enter {
+  animation: menu-panel-enter 0.45s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-panel-enter {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Location map (Leaflet) — branded Art of Dum marker, popup and a    */
+/* warm editorial tile tint. All selectors scoped to the map.         */
+/* ------------------------------------------------------------------ */
+
+.aod-map {
+  font-family: var(--font-sans-family);
+  z-index: 0;
+}
+
+/* Tiles keep their natural geographic colours — blue water, roads,
+   buildings, labels. No custom tint. */
+
+/* --- Branded marker ---------------------------------------------- */
+
+/* divIcon shell: no default Leaflet box */
+.leaflet-marker-icon.aod-map-marker {
+  background: transparent;
+  border: none;
+}
+
+.aod-map-marker__inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  filter: drop-shadow(0 5px 10px rgba(18, 17, 16, 0.3));
+}
+
+.aod-map-marker__dot {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 9999px;
+  background: #121110; /* dark-900 */
+  border: 2px solid #c59d5f; /* gold-500 */
+  box-shadow: inset 0 0 0 2.5px #faf7f2; /* sand-50 inner ring */
+  transition: transform 0.25s ease-out;
+}
+
+.aod-map-marker__inner:hover .aod-map-marker__dot {
+  transform: scale(1.15);
+}
+
+.aod-map-marker__label {
+  background: #faf7f2; /* sand-50 */
+  color: #121110; /* dark-900 */
+  border: 1px solid #ded5c3; /* sand-300 */
+  border-left: 2px solid #c59d5f; /* muted gold accent */
+  border-radius: 2px;
+  padding: 3px 9px 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* --- Popup -------------------------------------------------------- */
+
+.aod-map-popup .leaflet-popup-content-wrapper {
+  background: #faf7f2; /* sand-50 */
+  color: #262421; /* dark-700 */
+  border: 1px solid #ded5c3; /* sand-300 */
+  border-radius: 4px;
+  box-shadow: 0 18px 36px -18px rgba(18, 17, 16, 0.4);
+}
+
+.aod-map-popup .leaflet-popup-content {
+  margin: 13px 18px;
+  line-height: 1.55;
+  font-size: 13px;
+}
+
+.aod-map-popup .leaflet-popup-tip {
+  background: #faf7f2;
+  box-shadow: none;
+}
+
+.aod-map-popup .leaflet-popup-close-button {
+  color: #736d64; /* muted-foreground */
+  padding: 6px 8px 0 0;
+}
+
+.aod-map-popup .leaflet-popup-close-button:hover {
+  color: #121110;
+}
+
+.aod-map-popup__title {
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--font-serif-family);
+  font-size: 17px;
+  letter-spacing: 0.01em;
+  color: #121110; /* dark-900 */
+}
+
+.aod-map-popup__line {
+  display: block;
+}
+
+/* Directions link inside the marker popup */
+.aod-map-popup__directions {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #ded5c3; /* sand-300 */
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8c6833; /* gold-700 */
+  text-decoration: none;
+}
+
+.aod-map-popup__directions:hover,
+.aod-map-popup__directions:focus-visible {
+  color: #121110;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* --- Fullscreen --------------------------------------------------- */
+
+/* The map fills its wrapper via absolute positioning, so the native
+   fullscreen element (the wrapper) just needs a solid background. */
+.aod-map-wrapper:fullscreen {
+  background: #faf7f2;
+}
+
+.aod-map-wrapper:fullscreen .aod-map-canvas {
+  border-radius: 0;
+}
+
+/* Fullscreen toggle button — matches Leaflet's control look, styled
+   in the site palette */
+.aod-map-fullscreen {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 800; /* above map panes, below popups (1000) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #262421; /* dark-700 */
+  box-shadow: 0 1px 5px rgba(18, 17, 16, 0.4);
+  cursor: pointer;
+  transition: background-color 0.2s ease-out, color 0.2s ease-out;
+}
+
+.aod-map-fullscreen:hover {
+  background: #f4f4f4;
+  color: #121110;
+}
+
+.aod-map-fullscreen:focus-visible {
+  outline: 2px solid #c59d5f; /* gold-500 */
+  outline-offset: 2px;
+}

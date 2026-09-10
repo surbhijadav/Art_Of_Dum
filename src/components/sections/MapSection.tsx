@@ -1,9 +1,10 @@
-import Image from "next/image";
+import LocationMap from "@/components/map/LocationMap";
+import { RESTAURANT_DIRECTIONS_URL } from "@/lib/restaurant";
 
 /**
- * Location section — Column 1 reference (screenshot 181214).
- * Heading, map, divider and address/contact block.
- * All address/contact text comes from the project's own data (footer).
+ * Location section — heading, interactive map, divider and
+ * address/contact block. All address/contact text comes from the
+ * project's own data (footer / restaurant config).
  */
 export default function MapSection() {
   return (
@@ -24,17 +25,10 @@ export default function MapSection() {
         />
 
         <div className="mt-10 sm:mt-12 grid gap-10 lg:grid-cols-[3fr_2fr] lg:items-start lg:gap-14">
-          {/* Map image */}
-          <figure className="relative w-full overflow-hidden bg-sand-200">
-            <Image
-              src="/map.png"
-              alt="Map showing the Art of Dum location at Reem Mall, Al Reem Island, Abu Dhabi"
-              width={543}
-              height={602}
-              sizes="(min-width: 1024px) 640px, 92vw"
-              className="h-auto w-full object-cover"
-            />
-          </figure>
+          {/* Interactive map — gestures are scoped to the map container */}
+          <div className="relative w-full overflow-hidden border border-sand-300 bg-sand-200">
+            <LocationMap className="block h-[340px] w-full sm:h-[420px] lg:h-[480px]" />
+          </div>
 
           {/* Address & contact */}
           <div className="pt-1 lg:pt-3">
@@ -45,6 +39,16 @@ export default function MapSection() {
               <p>Al Reem Island, Najmat Abu Dhabi</p>
               <p>Abu Dhabi, United Arab Emirates</p>
             </div>
+
+            <a
+              href={RESTAURANT_DIRECTIONS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-7 inline-flex min-h-[44px] items-center gap-2 border border-dark-900/25 px-6 py-3 text-[12px] font-medium uppercase tracking-[0.22em] text-dark-900 transition-colors duration-300 hover:border-gold-600 hover:text-gold-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+            >
+              Get Directions
+              <span aria-hidden="true">↗</span>
+            </a>
 
             <div className="mt-8 pt-7 border-t border-sand-300 space-y-3 text-[15px] sm:text-base">
               <p>

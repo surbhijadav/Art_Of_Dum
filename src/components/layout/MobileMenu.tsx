@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { RESERVE_EXPERIENCE_LINKS } from "@/lib/navigation";
+import { RESTAURANT_TALABAT_URL } from "@/lib/restaurant";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,25 +14,39 @@ interface MobileMenuProps {
 
 interface NavItem {
   label: string;
-  href: string;
+  /** Destination for leaf items; parent triggers (with children) have none. */
+  href?: string;
+  /** External links (e.g. Talabat) open in a new browser tab. */
+  external?: boolean;
+  /** Items with children render as an expandable section, not a link. */
+  children?: readonly NavItem[];
 }
 
-const NAV_LINKS: readonly (NavItem & {
-  children?: readonly NavItem[];
-})[] = [
+const NAV_LINKS: readonly NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Menu", href: "/menu" },
   {
     label: "Reserve an Experience",
-    href: "/reserve-an-experience",
     children: RESERVE_EXPERIENCE_LINKS,
   },
   { label: "Contact", href: "/contact" },
-  { label: "Online Order", href: "/online-order" },
+  { label: "Online Order", href: RESTAURANT_TALABAT_URL, external: true },
 ];
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
-  // Prevent background scrolling when menu is open
+  const pathname = usePathname();
+  // Parent sections start collapsed unless the current route is one of
+  // their children (e.g. an experience subroute).
+  const [openSection, setOpenSection] = useState<string | null>(() =>
+    NAV_LINKS.find(
+      (item) =>
+        item.children?.some((child) => child.href === pathname)
+    )?.label ?? null
+  );
+
+  const toggleSection = (label: string) => {
+    setOpenSection((prev) => (prev === label ? null : label));
+  };
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -103,31 +119,86 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
       {/* Main Navigation Links */}
       <nav className="flex-1 px-8 py-10 flex flex-col justify-start gap-6">
-        {NAV_LINKS.map((item) => (
-          <div key={item.label}>
-            <Link
-              href={item.href}
-              onClick={onClose}
-              className="font-serif text-2xl text-dark-800 hover:text-gold-600 transition-colors py-2 block border-b border-sand-100/60"
-            >
-              {item.label}
-            </Link>
-            {item.children && (
-              <div className="mt-1 ml-3 pl-4 border-l border-sand-200 flex flex-col">
-                {item.children.map((child) => (
-                  <Link
-                    key={child.href}
-                    href={child.href}
-                    onClick={onClose}
-                    className="font-serif text-lg text-dark-700 hover:text-gold-600 transition-colors py-1.5"
+        {NAV_LINKS.map((item) => {
+          const isParentActive = Boolean(
+            item.children?.some((child) => child.href === pathname)
+          );
+          return (
+            <div key={item.label}>
+              {item.children ? (
+                /* Parent trigger — expands/collapses, never navigates */
+                <button
+                  type="button"
+                  onClick={() => toggleSection(item.label)}
+                  aria-expanded={openSection === item.label}
+                  aria-controls={`mobile-section-${item.label
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`}
+                  className={`w-full flex items-center justify-between text-left font-serif text-2xl transition-colors py-2 block border-b border-sand-100/60 cursor-pointer ${
+                    isParentActive
+                      ? "text-gold-600"
+                      : "text-dark-800 hover:text-gold-600"
+                  }`}
+                >
+                  {item.label}
+                  <span
+                    aria-hidden="true"
+                    className="text-lg leading-none text-dark-700"
                   >
-                    {child.label}
+                    {openSection === item.label ? "−" : "+"}
+                  </span>
+                </button>
+              ) : item.href ? (
+                item.external ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={onClose}
+                    className="font-serif text-2xl text-dark-800 hover:text-gold-600 transition-colors py-2 block border-b border-sand-100/60"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={onClose}
+                    className={`font-serif text-2xl transition-colors py-2 block border-b border-sand-100/60 ${
+                      pathname === item.href
+                        ? "text-gold-600"
+                        : "text-dark-800 hover:text-gold-600"
+                    }`}
+                  >
+                    {item.label}
                   </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+                )
+              ) : null}
+              {item.children && openSection === item.label && (
+                <div className="mt-1 ml-3 pl-4 border-l border-sand-200 flex flex-col">
+                  {item.children.map((child) =>
+                    child.href ? (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={onClose}
+                        aria-current={
+                          pathname === child.href ? "page" : undefined
+                        }
+                        className={`font-serif text-lg transition-colors py-1.5 ${
+                          pathname === child.href
+                            ? "text-gold-600"
+                            : "text-dark-700 hover:text-gold-600"
+                        }`}
+                      >
+                        {child.label}
+                      </Link>
+                    ) : null
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </nav>
 
       {/* Bottom Social Links & Info */}

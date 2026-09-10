@@ -6,11 +6,20 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import CollageCarousel from "@/components/ui/CollageCarousel";
+import type { CollageCategorySlide } from "@/components/ui/CollageCarousel";
 import { HOME_COLLAGES } from "@/lib/collage";
 import { CATEGORY_SHOWCASES } from "@/lib/images";
 import type { ShowcaseCategory } from "@/lib/images";
 
 const CATEGORY_ORDER: ShowcaseCategory[] = ["food", "beverages", "sheesha"];
+
+const SHOWCASE_SLIDES: CollageCategorySlide[] = CATEGORY_ORDER.map(
+  (categoryId) => ({
+    id: categoryId,
+    title: CATEGORY_SHOWCASES[categoryId].title,
+    ...HOME_COLLAGES[categoryId],
+  })
+);
 
 /**
  * Decorative Mandala Watermark SVG in luxury heritage line style.
@@ -124,6 +133,12 @@ export default function HomeShowcaseSection() {
     setActive(category);
   };
 
+  const activeIndex = CATEGORY_ORDER.indexOf(active);
+
+  const handleSlideChange = (index: number) => {
+    setActive(CATEGORY_ORDER[index]);
+  };
+
   /* Roving keyboard support for the tab list */
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     const currentIndex = CATEGORY_ORDER.indexOf(active);
@@ -190,7 +205,7 @@ export default function HomeShowcaseSection() {
               role="tablist"
               aria-label="Menu categories"
               onKeyDown={handleKeyDown}
-              className="flex items-center gap-6 sm:gap-8"
+              className="flex items-center justify-center lg:justify-start gap-6 sm:gap-8"
             >
               {CATEGORY_ORDER.map((categoryId, index) => {
                 const isActive = active === categoryId;
@@ -240,9 +255,10 @@ export default function HomeShowcaseSection() {
           className="mt-8 sm:mt-10 lg:mt-0 lg:col-span-7 focus:outline-none"
         >
           <CollageCarousel
-            key={active}
-            category={HOME_COLLAGES[active]}
-            label={`${CATEGORY_SHOWCASES[active].title} collage gallery`}
+            slides={SHOWCASE_SLIDES}
+            activeIndex={activeIndex}
+            onChange={handleSlideChange}
+            label="Menu category collage gallery"
           />
         </div>
 

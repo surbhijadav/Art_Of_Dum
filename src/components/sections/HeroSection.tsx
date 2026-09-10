@@ -105,7 +105,7 @@ export default function HeroSection() {
         {/* Reserve a Table CTA Button */}
         <div className="mt-8 sm:mt-10">
           <a
-            href="#experience"
+            href="/reserve-an-experience"
             className="inline-flex items-center justify-center px-11 py-4 border border-white/80 hover:border-white text-white hover:bg-white hover:text-dark-900 transition-all duration-300 text-sm uppercase tracking-[0.3em] font-medium backdrop-blur-[2px] focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-dark-900 active:scale-[0.98]"
           >
             Reserve a Table
