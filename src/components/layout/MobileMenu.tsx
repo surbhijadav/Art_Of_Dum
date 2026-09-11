@@ -23,7 +23,6 @@ interface NavItem {
 }
 
 const NAV_LINKS: readonly NavItem[] = [
-  { label: "Home", href: "/" },
   { label: "Menu", href: "/menu" },
   {
     label: "Reserve an Experience",

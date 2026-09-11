@@ -69,12 +69,6 @@ export default function Header() {
             aria-label="Desktop Main Navigation"
           >
             <Link
-              href="/"
-              className="text-[13px] uppercase tracking-[0.2em] text-sand-100 hover:text-gold-400 transition-colors font-medium py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-gold-500 hover:after:w-full after:transition-all"
-            >
-              Home
-            </Link>
-            <Link
               href="/menu"
               className="text-[13px] uppercase tracking-[0.2em] text-sand-100 hover:text-gold-400 transition-colors font-medium py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-gold-500 hover:after:w-full after:transition-all"
             >
